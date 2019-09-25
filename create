@@ -33,6 +33,7 @@ cmd=$( echo \
   -h CONTAINER \
   -e "VIRTUAL_HOST=$CONTAINER.$DOMAIN" \
   -e "VIRTUAL_PORT=8080" \
+  -e "SSL_CLIENT_VERIFY=on" \
   -v ${CONFIG}:/config \
   --name $CONTAINER \
   --restart always \
