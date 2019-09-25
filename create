@@ -11,15 +11,18 @@ DOMAIN=${hostname#*.*}
 echo dockergen-nginx will use $CONTAINER.$DOMAIN as the virtual host name.
 
 pushd mpc
+  JAVAIMAGE=docker.io/store/oracle/serverjre:8
   if [ ! -f java.tgz ]
   then
-    docker run -i -t --rm -v `pwd`:/export docker.io/store/oracle/serverjre:8 tar -zchf /export/java.tgz /usr/java/latest
+    docker run -i -t --rm -v `pwd`:/export $JAVAIMAGE tar -zchf /export/java.tgz /usr/java/latest
   fi
   if [ ! -f java.tgz ]
   then
+    echo Failed to extract java from $JAVAIMAGE
     echo This requires that have accepted the java license and that docker is logged in.
     echo Please see https://hub.docker.com/_/oracle-serverjre-8 for details.
-    echo Thi unfortunaly means you have to build you own image as this cannot be build on docker hub.
+    echo This unfortunaly means you have to build you own image as this cannot be built on docker hub.
+    exit 1
   fi
   sudo docker build . -t $IMAGE || exit 1 
 popd
