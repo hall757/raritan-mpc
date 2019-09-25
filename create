@@ -2,10 +2,11 @@
 
 CONTAINER=mpc
 IMAGE=hall757/raritan-mpc
-VOLUME=$(readlink $(pwd))
-CONFIG="${VOLUME}/config"
-echo Config directory: $CONFIG
-mkdir -p $CONFIG
+VOLUME=$(pwd)
+CONFIGDIR="${VOLUME}/config"
+echo Config directory: $CONFIGDIR
+
+mkdir -p $CONFIGDIR
 hostname=$(hostname)
 DOMAIN=${hostname#*.*}
 echo dockergen-nginx will use $CONTAINER.$DOMAIN as the virtual host name.
@@ -14,7 +15,7 @@ pushd mpc
   JAVAIMAGE=docker.io/store/oracle/serverjre:8
   if [ ! -f java.tgz ]
   then
-    docker run -i -t --rm -v `pwd`:/export $JAVAIMAGE tar -zchf /export/java.tgz /usr/java/latest
+    sudo docker run -i -t --rm -v `pwd`:/export $JAVAIMAGE tar -zchf /export/java.tgz /usr/java/latest
   fi
   if [ ! -f java.tgz ]
   then
@@ -33,11 +34,11 @@ sudo docker rm   $CONTAINER > /dev/null 2>&1
 cmd=$( echo \
  sudo docker run -d \
   -p 8080 \
-  -h CONTAINER \
+  -h $CONTAINER \
   -e "VIRTUAL_HOST=$CONTAINER.$DOMAIN" \
   -e "VIRTUAL_PORT=8080" \
   -e "SSL_CLIENT_VERIFY=on" \
-  -v ${CONFIG}:/config \
+  -v "${CONFIGDIR}:/config" \
   --name $CONTAINER \
   --restart always \
   -t $IMAGE \

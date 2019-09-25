@@ -5,6 +5,8 @@ The old Raritan KVM switches use unsigned applets in the web based java applicat
 The version of java in the base image does not render the application correctly.  Neither does OpenJDK.  
 Included in the package is a hack to get the offical Java into the image.  Oracle has made it impossible to build an image that includes a download of the official JRE or JDK.  What I do here to solve the prorblem is run the offical JRE8 from Oracle on docker hub and make it output a tar of the /usr/java/latest directory.  You will need to have a docker hub account, purchase the free JRE8 by accepting the license, log your docker instance into your docker hub account and run the create script in this package.
 
+At least it appears to work.  The app loads but I cannot connect to the DKX416 I have.  Using the JDK1.6, but still working on a way to download it in this script.
+
 # Security
 There is none.  I personally use jwilder/docker-gen to publish the app to a hostname and secure it with client certificates.
 
