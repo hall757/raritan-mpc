@@ -1,0 +1,11 @@
+#!/usr/bin/expect -f
+set timeout -1
+spawn /usr/java/latest/bin/java  -DINSTALL_PATH=/ -jar /tmp/mpc-installer.MPC_7.0.3.5.62.jar -console
+expect "press 1 to continue, 2 to quit, 3 to redisplay"
+send "1\r"
+expect "Select target path "
+send "/\r"
+expect "press 1 to continue, 2 to quit, 3 to redisplay"
+send "1\r"
+expect eof
+
