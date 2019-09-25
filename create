@@ -1,15 +1,16 @@
 #!/bin/bash
 
 CONTAINER=mpc
-IMAGE=mpc
+IMAGE=hall757/raritan-mpc
 VOLUME=$(readlink $(pwd))
 CONFIG="${VOLUME}/config"
 echo Config directory: $CONFIG
 mkdir -p $CONFIG
 hostname=$(hostname)
 DOMAIN=${hostname#*.*}
+echo dockergen-nginx will use $CONTAINER.$DOMAIN as the virtual host name.
 
-pushd $IMAGE
+pushd mpc
   if [ ! -f java.tgz ]
   then
     docker run -i -t --rm -v `pwd`:/export docker.io/store/oracle/serverjre:8 tar -zchf /export/java.tgz /usr/java/latest
@@ -20,24 +21,24 @@ pushd $IMAGE
     echo Please see https://hub.docker.com/_/oracle-serverjre-8 for details.
     echo Thi unfortunaly means you have to build you own image as this cannot be build on docker hub.
   fi
-  docker build . -t $IMAGE || exit 1 
+  sudo docker build . -t $IMAGE || exit 1 
 popd
 
 # kill any running containers
-docker stop $CONTAINER > /dev/null 2>&1
-docker rm   $CONTAINER > /dev/null 2>&1
-ID=$( \
- docker run -d \
-  -d \
+sudo docker stop $CONTAINER > /dev/null 2>&1
+sudo docker rm   $CONTAINER > /dev/null 2>&1
+cmd=$( echo \
+ sudo docker run -d \
   -p 8080 \
+  -h CONTAINER \
   -e "VIRTUAL_HOST=$CONTAINER.$DOMAIN" \
   -e "VIRTUAL_PORT=8080" \
   -v ${CONFIG}:/config \
-  -e EDGE=0 \
-  -e USER_ID=1000 \
-  -e GROUP_ID=1000 \
   --name $CONTAINER \
   --restart always \
   -t $IMAGE \
  )
+echo $cmd
+ID=$($cmd)
+
 echo $CONTAINER container: $ID

@@ -3,11 +3,11 @@
 # For some unknown reason, the first time the app is launched, the screen
 # is not painted correctly with openjdk.  So kill the first instance after 
 # launching.  Acutally, just use the offical java and it just works.
-export JAVAHOME=/$JDKHOME
+export JAVAHOME=/usr/java/latest
 mkdir -p /config/.java
 chown -R nobody /config
 cd /
-echo "/$JDKVER" > path.conf
+echo "/usr/java/latest" > path.conf
 #state=0 # never been launched yet
 while [ 1 ]
 do
