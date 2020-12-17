@@ -1,7 +1,7 @@
 # Builds a docker gui image
 FROM hurricane/dockergui:x11rdp1.3
 
-MAINTAINER randy.hall@open-source.guru
+LABEL author="Randy Hall <randy.hall@open-source.guru>"
 
 #########################################
 ##        ENVIRONMENTAL CONFIG         ##
