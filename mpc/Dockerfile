@@ -1,5 +1,5 @@
 # Builds a docker gui image
-FROM hurricane/dockergui:x11rdp1.3
+FROM boro/dockergui:x11rdp1.3
 
 LABEL author="Randy Hall <randy.hall@open-source.guru>"
 
